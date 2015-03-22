@@ -153,7 +153,7 @@ var collate = module.exports = function(opts) {
             }
             else {
               css.push("." + className.replace(" ", ".") + "{" +
-                "background: url('" + urlPrefix + imgName + "');" + 
+                "background-image: url('" + urlPrefix + imgName + "');" + 
               "}");
             }
           });
