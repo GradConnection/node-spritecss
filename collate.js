@@ -144,8 +144,8 @@ var collate = module.exports = function(opts) {
             if (deviceRatio == 1) {
               css.push("." + className.replace(" ", ".") + "{" +
                 "background: url('" + urlPrefix + imgName + "');" + 
-                "width: " + spriteSize.width + "px !important;" +
-                "height: " + spriteSize.height + "px !important;" +
+                "width: " + spriteSize.width + "px;" +
+                "height: " + spriteSize.height + "px;" +
                 "background-size: " + spriteSize.width + "px " + 
                   spriteSize.height + "px;" +
                 "display: inline-block;" +
@@ -199,8 +199,8 @@ var collate = module.exports = function(opts) {
             css.push("." + className.replace(" ", ".") + "{" +
               "background-position: -" + coordinate.x + "px -" + 
                 coordinate.y + "px;" + 
-              "width: " + coordinate.width + "px !important;" +
-              "height: " + coordinate.height + "px !important;" +
+              "width: " + coordinate.width + "px;" +
+              "height: " + coordinate.height + "px;" +
               "display: inline-block;" +
             "}");
           });
