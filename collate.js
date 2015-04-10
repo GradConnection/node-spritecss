@@ -9,7 +9,8 @@ var through = require('through-gulp'),
   spritesmith = require('spritesmith'),
   fs = require('fs'),
   mkdirp = require("mkdirp"),
-  cssClassName = require("./index").className;
+  cssClassName = require("./index").className,
+  jsdom = require("jsdom");
 
 function resizeImage(opts, width, height) {
   var className = opts.className
@@ -58,62 +59,65 @@ var collate = module.exports = function(opts) {
       var stream = this;
       var count = 0;
       var isEvaluated = false;
-      eval(src, file.path, {
-        __128931283SpriteRegister: function(opts) {
-          var className = cssClassName(opts);
-          if (!cache[className]) {
-            var image = images(imagePath);
-            var imageSize = image.size();
-            var imagePath = path.join(base, opts.src);
-            var width = opts.width || 
-              (imageSize.width / maximumDeviceRatio);
-            var height = opts.height || 
-              (imageSize.height / maximumDeviceRatio);
-            Object.keys(deviceRatios).forEach(function(deviceRatio) {
-              count += 1;
-              cache[className] = opts;
-              var imgBuffer = resizeImage({
-                className: className,
-                deviceRatio: deviceRatio,
-                image: images(imagePath)
-              }, width, height);
-              var imgName = imageName(className, deviceRatio);
-              var imgPath = path.join(cwd, tmp, imgName);
-              spritePaths[deviceRatio] = spritePaths[deviceRatio] || [];
-              spritePaths[deviceRatio].push(imgPath);
-              spriteClasses[imgPath] = className;
-              spriteSizes[imgPath] = {
-                width: width,
-                height: height
-              }
-              if (!doCollate) {
-                stream.push(new util.File({
-                  cwd: cwd,
-                  base: "",
-                  path: imgName,
-                  contents: imgBuffer
-                }));
-              }
-              else {
-                var callback = function(err) {
-                  if (err) console.error(err);
-                  count -=1;
-                  if (isEvaluated == true && count == 0) {
-                    cb();
-                  }
+      jsdom.env("", function(errors, window) {
+        eval(src, file.path, {
+          window: window,
+          __128931283SpriteRegister: function(opts) {
+            var className = cssClassName(opts);
+            if (!cache[className]) {
+              var image = images(imagePath);
+              var imageSize = image.size();
+              var imagePath = path.join(base, opts.src);
+              var width = opts.width || 
+                (imageSize.width / maximumDeviceRatio);
+              var height = opts.height || 
+                (imageSize.height / maximumDeviceRatio);
+              Object.keys(deviceRatios).forEach(function(deviceRatio) {
+                count += 1;
+                cache[className] = opts;
+                var imgBuffer = resizeImage({
+                  className: className,
+                  deviceRatio: deviceRatio,
+                  image: images(imagePath)
+                }, width, height);
+                var imgName = imageName(className, deviceRatio);
+                var imgPath = path.join(cwd, tmp, imgName);
+                spritePaths[deviceRatio] = spritePaths[deviceRatio] || [];
+                spritePaths[deviceRatio].push(imgPath);
+                spriteClasses[imgPath] = className;
+                spriteSizes[imgPath] = {
+                  width: width,
+                  height: height
                 }
-                mkdirp(path.dirname(imgPath), function(err) {
-                  if (err) callback(err);
-                  fs.writeFile(imgPath, imgBuffer, function(err) {
-                    callback(err);
+                if (!doCollate) {
+                  stream.push(new util.File({
+                    cwd: cwd,
+                    base: "",
+                    path: imgName,
+                    contents: imgBuffer
+                  }));
+                }
+                else {
+                  var callback = function(err) {
+                    if (err) console.error(err);
+                    count -=1;
+                    if (isEvaluated == true && count == 0) {
+                      cb();
+                    }
+                  }
+                  mkdirp(path.dirname(imgPath), function(err) {
+                    if (err) callback(err);
+                    fs.writeFile(imgPath, imgBuffer, function(err) {
+                      callback(err);
+                    });
                   });
-                });
-              }
-            });
+                }
+              });
+            }
+            return className;
           }
-          return className;
-        }
-      }, true);
+        }, true);
+      });
       isEvaluated = true;
       if (!doCollate) {
         cb()
