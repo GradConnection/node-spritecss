@@ -8,6 +8,16 @@ It was designed with the use of React in mind but can be used without it.
 
 ## Example ##
 
+    .node-spritecss-bg {background-image: url('/public/sprite@1x.png');background-size: 644px 380px;background-repeat: no-repeat;}
+    .node-spritecss-bg.node-spritecss-background-jpg-644-317{background-position: -0px -0px;width: 644px;height: 317px;display: inline-block;}
+    .node-spritecss-bg.node-spritecss-search-jpg-63-63{background-position: -0px -317px;width: 63px;height: 63px;display: inline-block;}
+    .node-spritecss-bg.node-spritecss-logo-png-49-49{background-position: -126px -317px;width: 49px;height: 49px;display: inline-block;}
+    .node-spritecss-bg.node-spritecss-graduateHatCert-png-63-63{background-position: -63px -317px;width: 63px;height: 63px;display: inline-block;}
+    .node-spritecss-bg.node-spritecss-graduateCert-png-17-17{background-position: -175px -317px;width: 17px;height: 17px;display: inline-block;}
+    @media(-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .node-spritecss-bg {background-image: url('/public/sprite@2x.png');}
+    }
+
 Let's say you have the following directory structure for your project:
 
 `MyProject/gulpfile.js`
