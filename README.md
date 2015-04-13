@@ -8,6 +8,8 @@ It was designed with the use of React in mind but can be used without it.
 
 ## Example ##
 
+Sample output:
+
     .node-spritecss-bg {background-image: url('/public/sprite@1x.png');background-size: 644px 380px;background-repeat: no-repeat;}
     .node-spritecss-bg.node-spritecss-background-jpg-644-317{background-position: -0px -0px;width: 644px;height: 317px;display: inline-block;}
     .node-spritecss-bg.node-spritecss-search-jpg-63-63{background-position: -0px -317px;width: 63px;height: 63px;display: inline-block;}
